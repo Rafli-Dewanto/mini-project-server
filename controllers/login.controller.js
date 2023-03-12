@@ -6,6 +6,9 @@ export const login = (req, res) => {
     const sql = `SELECT * FROM users WHERE name = '${name}'`;
     Connection.query(sql, (err, result) => {
         if (err) {
+            return res.status(500).json({msg: err});
+        }
+        if (result.length < 1) {
             return res.status(404).json({msg: "User tidak ditemukan"});
         }
         const match = bcrypt.compareSync(req.body.password, result[0].password);
